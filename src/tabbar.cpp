@@ -67,6 +67,17 @@ TabBar::TabBar(QWidget *parent) :
                 QUITIFNULL(current);
                 current->setUrl("zim://" + current->zimId() + ".zim/");
             });
+    connect(app->getAction(KiwixApp::SettingAction), &QAction::triggered,
+            this, [=]() {
+                if (KiwixApp::instance()->getSettingsManager()->isSettingsViewdisplayed()) {
+                    return;
+                }
+                auto index = currentIndex() + 1;
+                auto view = KiwixApp::instance()->getSettingsManager()->getView();
+                mp_stackedWidget->insertWidget(index, view);
+                insertTab(index,QIcon(":/icons/settings.svg"), tr("Settings"));
+                setCurrentIndex(index);
+            });
 }
 
 void TabBar::setStackedWidget(QStackedWidget *widget) {
